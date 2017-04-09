@@ -9,6 +9,7 @@ obj-$(CONFIG_SYSRESET) += sysreset-uclass.o
 ifndef CONFIG_SPL_BUILD
 obj-$(CONFIG_ROCKCHIP_RK3036) += sysreset_rk3036.o
 endif
+obj-$(CONFIG_ROCKCHIP_RK3066) += sysreset_rk3066.o
 obj-$(CONFIG_ROCKCHIP_RK3188) += sysreset_rk3188.o
 obj-$(CONFIG_ROCKCHIP_RK3288) += sysreset_rk3288.o
 obj-$(CONFIG_ROCKCHIP_RK3328) += sysreset_rk3328.o
