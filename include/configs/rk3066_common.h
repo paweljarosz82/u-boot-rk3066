@@ -1,0 +1,132 @@
+/*
+ * Copyright (c) 2017 Paweł Jarosz <paweljarosz3691@gmail.com>
+ *
+ * SPDX-License-Identifier:     GPL-2.0+
+ */
+
+#ifndef __CONFIG_RK3066_COMMON_H
+#define __CONFIG_RK3066_COMMON_H
+
+#include <asm/arch/hardware.h>
+#include "rockchip-common.h"
+
+#define EARLY_UART			1
+#define BOOTM_ENABLE_TAGS		1
+
+#define CONFIG_SKIP_LOWLEVEL_INIT_ONLY
+#define CONFIG_ENV_IS_NOWHERE
+#define CONFIG_ENV_SIZE			0x2000
+#define CONFIG_SYS_MAXARGS		16
+#define CONFIG_BAUDRATE			115200
+#define CONFIG_SYS_MALLOC_LEN		(64 << 20)
+#define CONFIG_SYS_CBSIZE		1024
+
+#define CONFIG_SYS_TIMER_RATE		24000000
+#define CONFIG_SYS_TIMER_BASE		0x20038000
+#define CONFIG_SYS_TIMER_COUNTER	(CONFIG_SYS_TIMER_BASE + 4)
+#define CONFIG_SYS_TIMER_COUNTS_DOWN
+
+#define CONFIG_SPL_BOARD_INIT
+
+#define CONFIG_SYS_TEXT_BASE		0x60408000
+
+#define CONFIG_SYS_INIT_SP_ADDR		0x80000000
+#define CONFIG_SYS_LOAD_ADDR		0x70800800
+
+#ifdef CONFIG_TPL_BUILD
+#define CONFIG_SPL_TEXT_BASE		0x10080804
+/* tpl size 2kb - 4byte RK30 header */
+#define CONFIG_SPL_MAX_SIZE		(0x400 - 0x4)
+#elif defined(CONFIG_SPL_BUILD)
+/* spl size 64kb sram - 2kb bootrom - 1kb spl */
+#define CONFIG_SPL_MAX_SIZE		(0x10000 - 0xC00)
+#define CONFIG_SPL_TEXT_BASE		0x10080C00
+#define CONFIG_SPL_STACK		0x1008ffff
+#define CONFIG_SPL_STACK_R_ADDR		0x70000000
+#define CONFIG_SPL_STACK_R		1
+#define CONFIG_SPL_STACK_R_MALLOC_SIMPLE_LEN 0x200000
+#define CONFIG_SPL_OF_CONTROL		1
+#define CONFIG_SPL_OF_PLATDATA		1
+#define CONFIG_SPL_FRAMEWORK		1
+#define CONFIG_SPL_CLK			1
+#define CONFIG_SPL_PINCTRL		1
+#define CONFIG_SPL_REGMAP		1
+#define CONFIG_SPL_SYSCON		1
+#define CONFIG_SPL_RAM			1
+#define CONFIG_SPL_DRIVERS_MISC_SUPPORT	1
+#define CONFIG_ROCKCHIP_SERIAL		1
+#define CONFIG_SPL_MMC_SUPPORT		1
+
+#define CONFIG_SPL_FS_LOAD_PAYLOAD_NAME	"u-boot-dtb.bin"
+#define CONFIG_SYS_MMCSD_FS_BOOT_PARTITION	1
+#define CONFIG_SPL_LIBDISK_SUPPORT	1
+#define CONFIG_SPL_EXT_SUPPORT		1
+#endif
+
+#define CONFIG_SYS_NS16550_MEM32
+
+#define CONFIG_ROCKCHIP_MAX_INIT_SIZE	(0x10000 - 0x800)
+#define CONFIG_ROCKCHIP_CHIP_TAG	"RK30"
+
+/* MMC/SD IP block */
+#define CONFIG_BOUNCE_BUFFER
+
+#define CONFIG_CMD_CACHE
+
+#define CONFIG_SYS_SDRAM_BASE		0x60000000
+#define CONFIG_NR_DRAM_BANKS		1
+#define SDRAM_BANK_SIZE			(1024UL << 20UL)
+
+#ifndef CONFIG_SPL_BUILD
+/* usb */
+#define CONFIG_USB
+#define CONFIG_DM_USB
+#define CONFIG_USB_STORAGE
+#define CONFIG_CMD_USB
+#define CONFIG_USB_DWC2
+
+#define CONFIG_USB_GADGET
+#define CONFIG_USB_GADGET_DUALSPEED
+#define CONFIG_USB_GADGET_DWC2_OTG
+#define CONFIG_ROCKCHIP_USB2_PHY
+#define CONFIG_USB_GADGET_VBUS_DRAW	0 
+
+#define CONFIG_USB_FUNCTION_MASS_STORAGE
+#define CONFIG_CMD_USB_MASS_STORAGE
+
+/* fastboot  */
+#define CONFIG_CMD_FASTBOOT
+#define CONFIG_USB_FUNCTION_FASTBOOT
+#define CONFIG_FASTBOOT_FLASH
+#define CONFIG_FASTBOOT_FLASH_MMC_DEV  0
+#define CONFIG_FASTBOOT_BUF_ADDR       CONFIG_SYS_LOAD_ADDR
+#define CONFIG_FASTBOOT_BUF_SIZE       0x08000000
+
+#define CONFIG_USB_GADGET_DOWNLOAD
+#define CONFIG_G_DNL_MANUFACTURER	"Rockchip"
+#define CONFIG_G_DNL_VENDOR_NUM		0x2207
+#define CONFIG_G_DNL_PRODUCT_NUM	0x300a
+
+#define ENV_MEM_LAYOUT_SETTINGS \
+	"scriptaddr=0x60000000\0" \
+	"pxefile_addr_r=0x60100000\0" \
+	"fdt_addr_r=0x61f00000\0" \
+	"kernel_addr_r=0x62000000\0" \
+	"ramdisk_addr_r=0x64000000\0"
+
+#include <config_distro_bootcmd.h>
+
+#define CONFIG_EXTRA_ENV_SETTINGS \
+	"fdt_high=0x6fffffff\0" \
+	"initrd_high=0x6fffffff\0" \
+	"partitions=" PARTS_DEFAULT \
+	ENV_MEM_LAYOUT_SETTINGS \
+	ROCKCHIP_DEVICE_SETTINGS \
+	BOOTENV
+
+#include <config_distro_defaults.h>
+#endif
+
+#define CONFIG_PREBOOT
+
+#endif
