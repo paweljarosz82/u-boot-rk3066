@@ -1,0 +1,99 @@
+/*
+ * Copyright (c) 2017 Paweł Jarosz <paweljarosz3691@gmail.com>
+ *
+ * SPDX-License-Identifier:     GPL-2.0+
+ */
+
+#ifndef __CONFIG_RK3066_COMMON_H
+#define __CONFIG_RK3066_COMMON_H
+
+#include <asm/arch/hardware.h>
+#include "rockchip-common.h"
+
+#define CONFIG_NR_DRAM_BANKS		1
+#define CONFIG_ENV_IS_NOWHERE
+#define CONFIG_ENV_SIZE			0x2000
+#define CONFIG_SYS_MAXARGS		16
+#define CONFIG_BAUDRATE			115200
+#define CONFIG_SYS_MALLOC_LEN		(32 << 20)
+#define CONFIG_SYS_CBSIZE		1024
+#define CONFIG_SKIP_LOWLEVEL_INIT
+
+#define CONFIG_SYS_TIMER_RATE		24000000
+#define CONFIG_SYS_TIMER_BASE		0x20038000
+#define CONFIG_SYS_TIMER_COUNTER	(CONFIG_SYS_TIMER_BASE + 4)
+#define CONFIG_SYS_TIMER_COUNTS_DOWN
+
+#define CONFIG_SYS_TEXT_BASE		0x60408000
+#define CONFIG_SYS_INIT_SP_ADDR		0x62F08000
+#define CONFIG_SYS_LOAD_ADDR		0x70800800
+
+#define CONFIG_SYS_NS16550_MEM32
+
+#define CONFIG_ROCKCHIP_MAX_INIT_SIZE	(4 << 10)
+#define CONFIG_ROCKCHIP_CHIP_TAG	"RK30"
+
+/* MMC/SD IP block */
+#define CONFIG_BOUNCE_BUFFER
+
+#define CONFIG_FAT_WRITE
+
+#define CONFIG_CMD_CACHE
+
+#define CONFIG_SYS_SDRAM_BASE		0x60000000
+#define CONFIG_NR_DRAM_BANKS		1
+#define SDRAM_BANK_SIZE			(1024UL << 20UL)
+
+/* usb */
+#define CONFIG_USB
+#define CONFIG_DM_USB
+#define CONFIG_USB_STORAGE
+#define CONFIG_CMD_USB
+#define CONFIG_USB_DWC2
+
+#define CONFIG_USB_GADGET
+#define CONFIG_USB_GADGET_DUALSPEED
+#define CONFIG_USB_GADGET_DWC2_OTG
+#define CONFIG_ROCKCHIP_USB2_PHY
+#define CONFIG_USB_GADGET_VBUS_DRAW	0 
+
+#define CONFIG_USB_FUNCTION_MASS_STORAGE
+#define CONFIG_CMD_USB_MASS_STORAGE
+
+/* fastboot  */
+#define CONFIG_CMD_FASTBOOT
+#define CONFIG_USB_FUNCTION_FASTBOOT
+#define CONFIG_FASTBOOT_FLASH
+#define CONFIG_FASTBOOT_FLASH_MMC_DEV  0
+#define CONFIG_FASTBOOT_BUF_ADDR       CONFIG_SYS_LOAD_ADDR
+#define CONFIG_FASTBOOT_BUF_SIZE       0x08000000
+
+#define CONFIG_USB_GADGET_DOWNLOAD
+#define CONFIG_G_DNL_MANUFACTURER	"Rockchip"
+#define CONFIG_G_DNL_VENDOR_NUM		0x2207
+#define CONFIG_G_DNL_PRODUCT_NUM	0x300a
+
+#define CONFIG_CMDLINE_TAG
+#define CONFIG_SETUP_MEMORY_TAGS
+#define CONFIG_INITRD_TAG
+#define CONFIG_SUPPORT_RAW_INITRD
+
+#define ENV_MEM_LAYOUT_SETTINGS \
+	"scriptaddr=0x60000000\0" \
+	"pxefile_addr_r=0x60100000\0" \
+	"fdt_addr_r=0x61f00000\0" \
+	"kernel_addr_r=0x62000000\0" \
+	"ramdisk_addr_r=0x64000000\0" \
+	"initrd_high=0x80000000\0"
+
+#include <config_distro_bootcmd.h>
+
+#define CONFIG_EXTRA_ENV_SETTINGS \
+	"fdt_high=0x7fffffff\0" \
+	"partitions=" PARTS_DEFAULT \
+	ENV_MEM_LAYOUT_SETTINGS \
+	BOOTENV
+
+#include <config_distro_defaults.h>
+
+#endif

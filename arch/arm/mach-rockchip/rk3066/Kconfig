@@ -1,0 +1,14 @@
+if ROCKCHIP_RK3066
+
+config TARGET_MK808_RK3066
+        bool "MK808_RK3066"
+
+config SYS_SOC
+        default "rockchip"
+
+config SYS_MALLOC_F_LEN
+        default 0x400
+
+source "board/rikomagic/mk808_rk3066/Kconfig"
+
+endif
