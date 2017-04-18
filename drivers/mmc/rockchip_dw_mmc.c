@@ -22,7 +22,13 @@ DECLARE_GLOBAL_DATA_PTR;
 
 struct rockchip_mmc_plat {
 #if CONFIG_IS_ENABLED(OF_PLATDATA)
+
+#ifdef CONFIG_ROCKCHIP_RK3066
+	struct dtd_rockchip_rk2928_dw_mshc dtplat;
+#else
 	struct dtd_rockchip_rk3288_dw_mshc dtplat;
+#endif
+
 #endif
 	struct mmc_config cfg;
 	struct mmc mmc;
@@ -93,8 +99,11 @@ static int rockchip_dwmmc_probe(struct udevice *dev)
 	int ret;
 
 #if CONFIG_IS_ENABLED(OF_PLATDATA)
+#ifdef CONFIG_ROCKCHIP_RK3066
+	struct dtd_rockchip_rk2928_dw_mshc *dtplat = &plat->dtplat;
+#else
 	struct dtd_rockchip_rk3288_dw_mshc *dtplat = &plat->dtplat;
-
+#endif
 	host->name = dev->name;
 	host->ioaddr = map_sysmem(dtplat->reg[0], dtplat->reg[1]);
 	host->buswidth = dtplat->bus_width;
@@ -102,7 +111,12 @@ static int rockchip_dwmmc_probe(struct udevice *dev)
 	host->priv = dev;
 	host->dev_index = 0;
 	priv->fifo_depth = dtplat->fifo_depth;
+
+#ifdef CONFIG_ROCKCHIP_RK3066
+	priv->fifo_mode = 1;
+#else
 	priv->fifo_mode = 0;
+#endif
 	memcpy(priv->minmax, dtplat->clock_freq_min_max, sizeof(priv->minmax));
 
 	ret = clk_get_by_index_platdata(dev, 0, dtplat->clocks, &priv->clk);
@@ -146,14 +160,27 @@ static int rockchip_dwmmc_bind(struct udevice *dev)
 }
 
 static const struct udevice_id rockchip_dwmmc_ids[] = {
+	{ .compatible = "rockchip,rk2928-dw-mshc" },
 	{ .compatible = "rockchip,rk3288-dw-mshc" },
 	{ }
+};
+
+U_BOOT_DRIVER(rockchip_rk2928_dw_mshc) = {
+	.name		= "rockchip_rk2928_dw_mshc",
+	.id		= UCLASS_MMC,
+	.of_match	= rockchip_dwmmc_ids,
+	.ofdata_to_platdata = rockchip_dwmmc_ofdata_to_platdata,
+	.ops		= &dm_dwmci_ops,
+	.bind		= rockchip_dwmmc_bind,
+	.probe		= rockchip_dwmmc_probe,
+	.priv_auto_alloc_size = sizeof(struct rockchip_dwmmc_priv),
+	.platdata_auto_alloc_size = sizeof(struct rockchip_mmc_plat),
 };
 
 U_BOOT_DRIVER(rockchip_dwmmc_drv) = {
 	.name		= "rockchip_rk3288_dw_mshc",
 	.id		= UCLASS_MMC,
-	.of_match	= rockchip_dwmmc_ids,
+	.of_match	= rockchip_dwmmc_ids + 1,
 	.ofdata_to_platdata = rockchip_dwmmc_ofdata_to_platdata,
 	.ops		= &dm_dwmci_ops,
 	.bind		= rockchip_dwmmc_bind,
