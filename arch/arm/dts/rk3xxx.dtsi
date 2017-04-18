@@ -192,6 +192,7 @@
 		clocks = <&cru HCLK_SDMMC>, <&cru SCLK_SDMMC>;
 		clock-names = "biu", "ciu";
 		fifo-depth = <256>;
+		fifo-mode;
 		status = "disabled";
 	};
 
@@ -202,6 +203,7 @@
 		clocks = <&cru HCLK_SDIO>, <&cru SCLK_SDIO>;
 		clock-names = "biu", "ciu";
 		fifo-depth = <256>;
+		fifo-mode;
 		status = "disabled";
 	};
 
@@ -212,6 +214,7 @@
 		clocks = <&cru HCLK_EMMC>, <&cru SCLK_EMMC>;
 		clock-names = "biu", "ciu";
 		fifo-depth = <256>;
+		fifo-mode;
 		status = "disabled";
 	};
 
