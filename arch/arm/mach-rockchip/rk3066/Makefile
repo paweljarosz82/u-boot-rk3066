@@ -6,6 +6,7 @@
 
 ifndef CONFIG_TPL_BUILD
 obj-y += clk_rk3066.o
+obj-y += sdram_rk3066.o
 obj-y += syscon_rk3066.o
 else
 obj-y += sdram_init.o
