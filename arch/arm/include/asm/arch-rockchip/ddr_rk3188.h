@@ -10,6 +10,11 @@
 #include <asm/arch/ddr_rk3288.h>
 
 /*
+ * RK3066 Tpl memory init.
+ */
+void sdram_initialise(void);
+
+/*
  * RK3188 Memory scheduler register map.
  */
 struct rk3188_msch {
