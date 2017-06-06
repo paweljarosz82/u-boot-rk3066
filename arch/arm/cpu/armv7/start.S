@@ -36,6 +36,19 @@
 #endif
 
 reset:
+
+#if defined(CONFIG_ROCKCHIP_RK3066) && defined(CONFIG_TPL_BUILD)
+	ldr	r3, =0x10080900
+	ldr	r0, [r3]
+	cmp	r0, #1
+	movne	r0, #1
+	strne	r0, [r3]
+	beq	out_of_bootrom
+	bx	lr
+out_of_bootrom:
+	mov	r0, #0
+	str	r0, [r3]
+#endif
 	/* Allow the board to save important registers */
 	b	save_boot_params
 save_boot_params_ret:
