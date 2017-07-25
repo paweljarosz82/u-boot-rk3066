@@ -5,6 +5,7 @@
 #
 
 obj-$(CONFIG_ROCKCHIP_BROM_HELPER) += bootrom.o
+obj-$(CONFIG_$(SPL_TPL_)RAM) += sdram_common.o
 
 ifdef CONFIG_TPL_BUILD
 obj-$(CONFIG_ROCKCHIP_RK3066) += rk3066-board-tpl.o
