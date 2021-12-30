@@ -19,6 +19,9 @@ config ROCKCHIP_BOOT_MODE_REG
 config ROCKCHIP_STIMER_BASE
 	default 0x200440a0
 
+config SYS_ARCH_TIMER
+	default y
+
 config SYS_SOC
 	default "rk3036"
 
