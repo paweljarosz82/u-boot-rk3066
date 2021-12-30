@@ -16,6 +16,7 @@
 #include <asm/global_data.h>
 #include <asm/io.h>
 #include <linux/bitops.h>
+#include <linux/kconfig.h>
 
 DECLARE_GLOBAL_DATA_PTR;
 
@@ -70,7 +71,6 @@ u32 spl_mmc_boot_mode(const u32 boot_device)
 	return MMCSD_MODE_RAW;
 }
 
-#if !defined(CONFIG_ROCKCHIP_RK3188)
 #define TIMER_LOAD_COUNT_L	0x00
 #define TIMER_LOAD_COUNT_H	0x04
 #define TIMER_CONTROL_REG	0x10
@@ -80,6 +80,7 @@ u32 spl_mmc_boot_mode(const u32 boot_device)
 
 __weak void rockchip_stimer_init(void)
 {
+#if defined(CONFIG_ROCKCHIP_STIMER_BASE)
 	/* If Timer already enabled, don't re-init it */
 	u32 reg = readl(CONFIG_ROCKCHIP_STIMER_BASE + TIMER_CONTROL_REG);
 
@@ -94,8 +95,8 @@ __weak void rockchip_stimer_init(void)
 	writel(0xffffffff, CONFIG_ROCKCHIP_STIMER_BASE + 4);
 	writel(TIMER_EN | TIMER_FMODE, CONFIG_ROCKCHIP_STIMER_BASE +
 	       TIMER_CONTROL_REG);
-}
 #endif
+}
 
 __weak int board_early_init_f(void)
 {
@@ -132,9 +133,11 @@ void board_init_f(ulong dummy)
 		hang();
 	}
 	arch_cpu_init();
-#if !defined(CONFIG_ROCKCHIP_RK3188)
-	rockchip_stimer_init();
-#endif
+
+	/* Init secure timer */
+	if (IS_ENABLED(CONFIG_ROCKCHIP_STIMER))
+		rockchip_stimer_init();
+
 #ifdef CONFIG_SYS_ARCH_TIMER
 	/* Init ARM arch timer in arch/arm/cpu/armv7/arch_timer.c */
 	timer_init();
