@@ -138,10 +138,10 @@ void board_init_f(ulong dummy)
 	if (IS_ENABLED(CONFIG_ROCKCHIP_STIMER))
 		rockchip_stimer_init();
 
-#ifdef CONFIG_SYS_ARCH_TIMER
-	/* Init ARM arch timer in arch/arm/cpu/armv7/arch_timer.c */
-	timer_init();
-#endif
+	/* Init ARM arch timer */
+	if (IS_ENABLED(CONFIG_SYS_ARCH_TIMER))
+		timer_init();
+
 #if !defined(CONFIG_TPL) || defined(CONFIG_SPL_RAM)
 	debug("\nspl:init dram\n");
 	ret = dram_init();
