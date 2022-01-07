@@ -19,6 +19,11 @@
 #include <linux/delay.h>
 #include <linux/err.h>
 
+enum rockchip_dwmmc_type {
+	RK2928_MSHC,
+	RK3288_MSHC,
+};
+
 struct rockchip_mmc_plat {
 #if CONFIG_IS_ENABLED(OF_PLATDATA)
 	struct dtd_rockchip_rk3288_dw_mshc dtplat;
@@ -111,6 +116,7 @@ static int rockchip_dwmmc_probe(struct udevice *dev)
 
 #if CONFIG_IS_ENABLED(OF_PLATDATA)
 	struct dtd_rockchip_rk3288_dw_mshc *dtplat = &plat->dtplat;
+	enum rockchip_dwmmc_type type = dev_get_driver_data(dev);
 
 	host->name = dev->name;
 	host->ioaddr = map_sysmem(dtplat->reg[0], dtplat->reg[1]);
@@ -119,7 +125,10 @@ static int rockchip_dwmmc_probe(struct udevice *dev)
 	host->priv = dev;
 	host->dev_index = 0;
 	priv->fifo_depth = dtplat->fifo_depth;
-	priv->fifo_mode = 0;
+	if (type == RK2928_MSHC)
+		priv->fifo_mode = 1;
+	else
+		priv->fifo_mode = 0;
 	priv->minmax[0] = 400000;  /*  400 kHz */
 	priv->minmax[1] = dtplat->max_frequency;
 
@@ -163,8 +172,8 @@ static int rockchip_dwmmc_bind(struct udevice *dev)
 }
 
 static const struct udevice_id rockchip_dwmmc_ids[] = {
-	{ .compatible = "rockchip,rk2928-dw-mshc" },
-	{ .compatible = "rockchip,rk3288-dw-mshc" },
+	{ .compatible = "rockchip,rk2928-dw-mshc", .data = RK2928_MSHC },
+	{ .compatible = "rockchip,rk3288-dw-mshc", .data = RK3288_MSHC },
 	{ }
 };
 
@@ -180,5 +189,6 @@ U_BOOT_DRIVER(rockchip_rk3288_dw_mshc) = {
 	.plat_auto	= sizeof(struct rockchip_mmc_plat),
 };
 
+DM_DRIVER_ALIAS(rockchip_rk3288_dw_mshc, rockchip_rk2928_dw_mshc)
 DM_DRIVER_ALIAS(rockchip_rk3288_dw_mshc, rockchip_rk3328_dw_mshc)
 DM_DRIVER_ALIAS(rockchip_rk3288_dw_mshc, rockchip_rk3368_dw_mshc)
