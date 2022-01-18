@@ -24,6 +24,8 @@ List of mainline supported Rockchip boards:
 * rk3036
      - Rockchip Evb-RK3036 (evb-rk3036)
      - Kylin (kylin_rk3036)
+* rk3066
+     - Rikomagic MK808 (mk808)
 * rk3128
      - Rockchip Evb-RK3128 (evb-rk3128)
 * rk3188
