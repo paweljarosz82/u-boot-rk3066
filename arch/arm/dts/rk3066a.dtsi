@@ -9,7 +9,6 @@
 #include <dt-bindings/clock/rk3066a-cru.h>
 #include <dt-bindings/power/rk3066-power.h>
 #include "rk3xxx.dtsi"
-#include "rk3xxx-u-boot.dtsi"
 
 / {
 	compatible = "rockchip,rk3066a";
