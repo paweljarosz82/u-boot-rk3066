@@ -462,7 +462,7 @@ static void tx_handler_ul_image(struct usb_ep *ep, struct usb_request *req)
 	      transfer_size, blkcount, f_rkusb->lba,
 	      f_rkusb->ul_size, f_rkusb->ul_bytes);
 
-	int blks = blk_dread(f_rkusb->desc, f_rkusb->lba, blkcount, rbuffer);
+	int blks = f_rkusb->desc->rockusb_read(f_rkusb->desc, f_rkusb->lba, blkcount, rbuffer);
 
 	if (blks != blkcount) {
 		printf("failed reading from device %s: %d\n",
@@ -512,7 +512,7 @@ static void rx_handler_dl_image(struct usb_ep *ep, struct usb_request *req)
 	debug("dl %x bytes, %x blks, write lba %x, dl_size:%x, dl_bytes:%x, ",
 	      transfer_size, blkcnt, f_rkusb->lba, f_rkusb->dl_size,
 	      f_rkusb->dl_bytes);
-	blks = blk_dwrite(f_rkusb->desc, f_rkusb->lba, blkcnt, f_rkusb->buf);
+	blks = f_rkusb->desc->rockusb_write(f_rkusb->desc, f_rkusb->lba, blkcnt, f_rkusb->buf);
 	if (blks != blkcnt) {
 		printf("failed writing to device %s: %d\n", f_rkusb->dev_type,
 		       f_rkusb->dev_index);
@@ -631,9 +631,9 @@ static void cb_read_lba(struct usb_ep *ep, struct usb_request *req)
 		char *type = f_rkusb->dev_type;
 		int index = f_rkusb->dev_index;
 
-		f_rkusb->desc = blk_get_dev(type, index);
-		if (!f_rkusb->desc ||
-		    f_rkusb->desc->type == DEV_TYPE_UNKNOWN) {
+		f_rkusb->desc = rockusb_get_dev(type, index);
+
+		if (!f_rkusb->desc) {
 			printf("invalid device \"%s\", %d\n", type, index);
 			rockusb_tx_write_csw(f_rkusb->tag, 0, CSW_FAIL,
 					     USB_BULK_CS_WRAP_LEN);
@@ -673,9 +673,9 @@ static void cb_write_lba(struct usb_ep *ep, struct usb_request *req)
 		char *type = f_rkusb->dev_type;
 		int index = f_rkusb->dev_index;
 
-		f_rkusb->desc = blk_get_dev(type, index);
-		if (!f_rkusb->desc ||
-		    f_rkusb->desc->type == DEV_TYPE_UNKNOWN) {
+		f_rkusb->desc = rockusb_get_dev(type, index);
+
+		if (!f_rkusb->desc) {
 			printf("invalid device \"%s\", %d\n", type, index);
 			rockusb_tx_write_csw(f_rkusb->tag, 0, CSW_FAIL,
 					     USB_BULK_CS_WRAP_LEN);
@@ -714,9 +714,9 @@ static void cb_erase_lba(struct usb_ep *ep, struct usb_request *req)
 		char *type = f_rkusb->dev_type;
 		int index = f_rkusb->dev_index;
 
-		f_rkusb->desc = blk_get_dev(type, index);
-		if (!f_rkusb->desc ||
-		    f_rkusb->desc->type == DEV_TYPE_UNKNOWN) {
+		f_rkusb->desc = rockusb_get_dev(type, index);
+
+		if (!f_rkusb->desc) {
 			printf("invalid device \"%s\", %d\n", type, index);
 			rockusb_tx_write_csw(f_rkusb->tag, 0, CSW_FAIL,
 					     USB_BULK_CS_WRAP_LEN);
@@ -729,7 +729,7 @@ static void cb_erase_lba(struct usb_ep *ep, struct usb_request *req)
 	debug("require erase %x sectors from lba %x\n",
 	      sector_count, lba);
 
-	blks = blk_derase(f_rkusb->desc, lba, sector_count);
+	blks = f_rkusb->desc->rockusb_erase(f_rkusb->desc, lba, sector_count);
 	if (blks != sector_count) {
 		printf("failed erasing device %s: %d\n", f_rkusb->dev_type,
 		       f_rkusb->dev_index);
