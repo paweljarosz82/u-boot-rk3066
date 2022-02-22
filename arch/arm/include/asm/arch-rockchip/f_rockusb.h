@@ -112,6 +112,17 @@ struct bulk_cs_wrap {
 #define CSW_GOOD                0x00
 #define CSW_FAIL                0x01
 
+struct rockusb_dev_desc {
+	unsigned long blksz;
+	void *priv;
+	int (*rockusb_erase)(struct rockusb_dev_desc *desc, unsigned int start,
+			     unsigned int blkcnt);
+	int (*rockusb_read)(struct rockusb_dev_desc *desc, unsigned int lba,
+			    unsigned int blkcount, char *buf);
+	int (*rockusb_write)(struct rockusb_dev_desc *desc, unsigned int lba,
+			     unsigned int blkcount, char *buf);
+};
+
 struct f_rockusb {
 	struct usb_function usb_function;
 	struct usb_ep *in_ep, *out_ep;
@@ -124,7 +135,7 @@ struct f_rockusb {
 	unsigned int dl_bytes;
 	unsigned int ul_size;
 	unsigned int ul_bytes;
-	struct blk_desc *desc;
+	struct rockusb_dev_desc *desc;
 	int reboot_flag;
 	void *buf;
 	void *buf_head;
@@ -132,4 +143,7 @@ struct f_rockusb {
 
 /* init rockusb device, tell rockusb which device you want to read/write*/
 void rockusb_dev_init(char *dev_type, int dev_index);
+
+struct rockusb_dev_desc *rockusb_get_dev(char *dev_type,
+					 unsigned int dev_index);
 #endif /* _F_ROCKUSB_H_ */
