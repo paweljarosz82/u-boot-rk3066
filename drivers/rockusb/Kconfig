@@ -11,6 +11,20 @@ config ROCKUSB
           doc/README.rockusb
 
 
+if ROCKUSB
+
+config ROCKUSB_MMC
+        bool "MMC backend for ROCKUSB"
+        depends on DM_MMC
+        help
+          This option enables using ROCKUSB to read and write to MMC based storage.
+          Rockusb protocol is widely used by Rockchip SoC based devices. It can
+          read/write info, image to/from devices. This enables the USB part of
+          the rockusb gadget. For more detail about Rockusb protocol, please see
+          doc/README.rockusb
+
+endif
+
 config SPL_ROCKUSB
         bool "SPL ROCKUSB gadget"
         depends on USB_GADGET && SPL_USB_FUNCTION_ROCKUSB
@@ -20,5 +34,20 @@ config SPL_ROCKUSB
           read/write info, image to/from devices. This enables the USB part of
           the rockusb gadget. For more detail about Rockusb protocol, please see
           doc/README.rockusb
+
+if SPL_ROCKUSB
+
+config SPL_ROCKUSB_MMC
+        bool "SPL MMC backend for ROCKUSB"
+        depends on SPL_DM_MMC
+        help
+          This option enables using ROCKUSB to read and write to MMC based
+          storage in SPL.
+          Rockusb protocol is widely used by Rockchip SoC based devices. It can
+          read/write info, image to/from devices. This enables the USB part of
+          the rockusb gadget. For more detail about Rockusb protocol, please see
+          doc/README.rockusb
+
+endif
 
 endmenu
