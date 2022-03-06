@@ -1,0 +1,15 @@
+menu "ROCKUSB support"
+
+config ROCKUSB
+        bool "ROCKUSB gadget"
+        depends on USB_GADGET && USB_FUNCTION_ROCKUSB
+        help
+          Enable ROCKUSB gadget support.
+
+config SPL_ROCKUSB
+        bool "SPL ROCKUSB gadget"
+        depends on USB_GADGET && SPL_USB_FUNCTION_ROCKUSB
+        help
+          Enable SPL ROCKUSB gadget support.
+
+endmenu
