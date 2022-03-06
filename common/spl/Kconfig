@@ -1219,6 +1219,12 @@ config SPL_DFU_RAM
 
 endchoice
 
+config SPL_ROCKUSB_SUPPORT
+	bool "ROCKUSB boot device support in SPL"
+	depends on SPL_USB_GADGET && SPL_ROCKUSB
+	help
+	 This feature enables the boot to ROCKUSB in SPL.
+
 config SPL_USB_SDP_SUPPORT
 	bool "Support SDP (Serial Download Protocol)"
 	depends on SPL_SERIAL
