@@ -146,4 +146,16 @@ void rockusb_dev_init(char *dev_type, int dev_index);
 
 struct rockusb_dev_desc *rockusb_get_dev(char *dev_type,
                                          unsigned int dev_index);
+
+#if CONFIG_IS_ENABLED(ROCKUSB_MMC)
+extern int rockusb_fill_mmc_dev(struct rockusb_dev_desc *desc, char *dev_type,
+								unsigned int dev_index);
+#else
+static inline int rockusb_fill_mmc_dev(struct rockusb_dev_desc *desc,
+									   char *dev_type, unsigned int dev_index)
+{
+	puts("ROCKUSB no MMC support!\n");
+	return -ENODEV;
+}
+#endif
 #endif /* _F_ROCKUSB_H_ */

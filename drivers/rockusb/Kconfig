@@ -6,10 +6,31 @@ config ROCKUSB
         help
           Enable ROCKUSB gadget support.
 
+if ROCKUSB
+
+config ROCKUSB_MMC
+        bool "MMC backend for ROCKUSB"
+        depends on DM_MMC
+        help
+          This option enables using ROCKUSB to read and write to MMC based storage.
+
+endif
+
 config SPL_ROCKUSB
         bool "SPL ROCKUSB gadget"
         depends on USB_GADGET && SPL_USB_FUNCTION_ROCKUSB
         help
           Enable SPL ROCKUSB gadget support.
+
+if SPL_ROCKUSB
+
+config SPL_ROCKUSB_MMC
+        bool "SPL MMC backend for ROCKUSB"
+        depends on SPL_DM_MMC
+        help
+          This option enables using ROCKUSB to read and write to MMC based
+          storage in SPL.
+
+endif
 
 endmenu
