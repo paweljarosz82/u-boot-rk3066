@@ -21,8 +21,7 @@ static int rk3066_pinctrl_set_mux(struct rockchip_pin_bank *bank, int pin, int m
 	u8 bit;
 	u32 data;
 
-	regmap = (bank->iomux[iomux_num].type & IOMUX_SOURCE_PMU)
-				? priv->regmap_pmu : priv->regmap_base;
+	regmap = priv->regmap_base;
 
 	/* get basic quadrupel of mux registers and the correct reg inside */
 	mux_type = bank->iomux[iomux_num].type;
