@@ -1,0 +1,24 @@
+menu "ROCKUSB support"
+
+config ROCKUSB
+        bool "ROCKUSB gadget"
+        depends on USB_GADGET && USB_FUNCTION_ROCKUSB
+        help
+          Enable ROCKUSB gadget support.
+          Rockusb protocol is widely used by Rockchip SoC based devices. It can
+          read/write info, image to/from devices. This enables the USB part of
+          the rockusb gadget. For more detail about Rockusb protocol, please see
+          doc/README.rockusb
+
+
+config SPL_ROCKUSB
+        bool "SPL ROCKUSB gadget"
+        depends on USB_GADGET && SPL_USB_FUNCTION_ROCKUSB
+        help
+          Enable SPL ROCKUSB gadget support.
+          Rockusb protocol is widely used by Rockchip SoC based devices. It can
+          read/write info, image to/from devices. This enables the USB part of
+          the rockusb gadget. For more detail about Rockusb protocol, please see
+          doc/README.rockusb
+
+endmenu
