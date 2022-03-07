@@ -355,6 +355,17 @@ config TPL_ROCKCHIP_COMMON_BOARD
 	  common board is a basic TPL board init which can be shared for most
 	  of SoCs to avoid copy-paste for different SoCs.
 
+config SPL_USBPLUG
+	bool "Rockchip usbplug firmware download"
+	depends on SPL
+	help
+	  Some Rockchip SoCs like RK3066 to flash firmware by USB OTG need to have
+	  second stage loader of size smaller than 65533 bytes.
+	  USBPLUG is minimal SPL and meets this condition. Main task of USBPLUG is
+	  to be loaded to RAM and allow flash using ROCKUSB, TPL and U-Boot proper
+	  to NAND or MMC, depending on the board configuration installed medium.
+	  It imitates behavior of Rockchip's binary RKUSBPLUG.
+
 config ROCKCHIP_BOOT_MODE_REG
 	hex "Rockchip boot mode flag register address"
 	help
