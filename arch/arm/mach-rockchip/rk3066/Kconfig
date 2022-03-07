@@ -1,6 +1,8 @@
 if ROCKCHIP_RK3066
 
 config TARGET_MK808
+	select SPL_ROCKCHIP_NAND
+	select SPL_ROCKUSB_NAND
 	bool "MK808"
 	help
 	  MK808 is a RK3066-based board with 1 USB host and 1 USB OTG port,
@@ -14,7 +16,7 @@ config SYS_SOC
 	default "rk3066"
 
 config SYS_MALLOC_F_LEN
-	default 0x0800
+	default 0x20000
 
 config SPL_LIBCOMMON_SUPPORT
 	default y
@@ -25,14 +27,35 @@ config SPL_LIBGENERIC_SUPPORT
 config SPL_SERIAL
 	default y
 
+config SPL_STACK
+	default 0x66000000
+
+config SPL_SYS_MALLOC_F_LEN
+	default 0x20000
+
+config SYS_NAND_BLOCK_SIZE
+	default 0x0
+
+config TPL_LDSCRIPT
+	default "arch/arm/mach-rockchip/u-boot-tpl.lds"
+
 config TPL_LIBCOMMON_SUPPORT
 	default y
 
 config TPL_LIBGENERIC_SUPPORT
 	default y
 
+config TPL_NEEDS_SEPARATE_STACK
+	default y
+
+config TPL_SYS_MALLOC_F_LEN
+	default 0x2000
+
 config TPL_SERIAL
 	default y
+
+config TPL_STACK
+	default 0x1008FFFF
 
 source "board/rikomagic/mk808/Kconfig"
 
