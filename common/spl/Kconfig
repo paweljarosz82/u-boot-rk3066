@@ -1242,6 +1242,14 @@ config SPL_SDP_USB_DEV
 	  so it can be used in compiled environment.
 endif
 
+config SPL_USB_FUNCTION_ROCKUSB
+	bool "Enable USB rockusb gadget"
+	help
+	  Rockusb protocol is widely used by Rockchip SoC based devices. It can
+	  read/write info, image to/from devices. This enables the USB part of
+	  the rockusb gadget.for more detail about Rockusb protocol, please see
+	  doc/README.rockusb
+
 config SPL_WATCHDOG
 	bool "Support watchdog drivers"
 	imply SPL_WDT if !HW_WATCHDOG
