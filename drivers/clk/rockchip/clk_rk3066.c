@@ -277,7 +277,7 @@ static ulong rk3066_clk_mmc_get_clk(struct rk3066_cru *cru, uint gclk_rate,
 		return -EINVAL;
 	}
 
-	return DIV_TO_RATE(gclk_rate, div) / 2;
+	return DIV_TO_RATE(gclk_rate, div);
 }
 
 static ulong rk3066_clk_mmc_set_clk(struct rk3066_cru *cru, uint gclk_rate,
@@ -287,7 +287,7 @@ static ulong rk3066_clk_mmc_set_clk(struct rk3066_cru *cru, uint gclk_rate,
 
 	debug("%s: gclk_rate=%u\n", __func__, gclk_rate);
 	/* MMC clock by default divides by 2 internally, so need to provide double in CRU. */
-	src_clk_div = DIV_ROUND_UP(gclk_rate / 2, freq) - 1;
+	src_clk_div = DIV_ROUND_UP(gclk_rate, freq) - 1;
 	assert(src_clk_div <= 0x3f);
 
 	switch (periph) {
@@ -490,7 +490,7 @@ static void rk3066_clk_init(struct rk3066_cru *cru, struct rk3066_grf *grf)
 		     PLL_MODE_NORMAL << GPLL_MODE_SHIFT |
 		     PLL_MODE_NORMAL << CPLL_MODE_SHIFT);
 
-	rk3066_clk_mmc_set_clk(cru, PERI_HCLK_HZ, HCLK_SDMMC, 16000000);
+	rk3066_clk_mmc_set_clk(cru, PERI_HCLK_HZ, HCLK_SDMMC, 4000000);
 }
 
 static ulong rk3066_clk_get_rate(struct clk *clk)
@@ -603,6 +603,24 @@ static int rk3066_clk_enable(struct clk *clk)
 	case HCLK_SDIO:
 		rk_clrreg(&priv->cru->cru_clkgate_con[5], BIT(11));
 		break;
+	case PCLK_GPIO0:
+		rk_clrreg(&priv->cru->cru_clkgate_con[8], BIT(9));
+		break;
+	case PCLK_GPIO1:
+		rk_clrreg(&priv->cru->cru_clkgate_con[8], BIT(10));
+		break;
+	case PCLK_GPIO2:
+		rk_clrreg(&priv->cru->cru_clkgate_con[8], BIT(11));
+		break;
+	case PCLK_GPIO3:
+		rk_clrreg(&priv->cru->cru_clkgate_con[8], BIT(12));
+		break;
+	case PCLK_GPIO4:
+		rk_clrreg(&priv->cru->cru_clkgate_con[8], BIT(13));
+		break;
+	case PCLK_GPIO6:
+		rk_clrreg(&priv->cru->cru_clkgate_con[8], BIT(15));
+		break;
 	}
 
 	return 0;
@@ -617,10 +635,30 @@ static int rk3066_clk_disable(struct clk *clk)
 		rk_setreg(&priv->cru->cru_clkgate_con[5], BIT(9));
 		break;
 	case HCLK_SDMMC:
+	case SCLK_SDMMC:
 		rk_setreg(&priv->cru->cru_clkgate_con[5], BIT(10));
 		break;
 	case HCLK_SDIO:
+	case SCLK_SDIO:
 		rk_setreg(&priv->cru->cru_clkgate_con[5], BIT(11));
+		break;
+	case PCLK_GPIO0:
+		rk_setreg(&priv->cru->cru_clkgate_con[8], BIT(9));
+		break;
+	case PCLK_GPIO1:
+		rk_setreg(&priv->cru->cru_clkgate_con[8], BIT(10));
+		break;
+	case PCLK_GPIO2:
+		rk_setreg(&priv->cru->cru_clkgate_con[8], BIT(11));
+		break;
+	case PCLK_GPIO3:
+		rk_setreg(&priv->cru->cru_clkgate_con[8], BIT(12));
+		break;
+	case PCLK_GPIO4:
+		rk_setreg(&priv->cru->cru_clkgate_con[8], BIT(13));
+		break;
+	case PCLK_GPIO6:
+		rk_setreg(&priv->cru->cru_clkgate_con[8], BIT(15));
 		break;
 	}
 
