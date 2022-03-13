@@ -31,6 +31,13 @@ config SPL_ROCKUSB_MMC
           This option enables using ROCKUSB to read and write to MMC based
           storage in SPL.
 
+config SPL_ROCKUSB_NAND
+        bool "SPL NAND backend for ROCKUSB"
+        depends on SPL_ROCKCHIP_NAND
+        help
+          This option enables using ROCKUSB to read and write to MMC based
+          storage in SPL.
+
 endif
 
 endmenu

@@ -158,4 +158,16 @@ static inline int rockusb_fill_mmc_dev(struct rockusb_dev_desc *desc,
 	return -ENODEV;
 }
 #endif
+
+#if CONFIG_IS_ENABLED(ROCKUSB_NAND)
+extern int rockusb_fill_nand_dev(struct rockusb_dev_desc *desc, char *dev_type,
+								 unsigned int dev_index);
+#else
+static inline int rockusb_fill_nand_dev(struct rockusb_dev_desc *desc,
+										char *dev_type, unsigned int dev_index)
+{
+	puts("ROCKUSB no NAND support!\n");
+	return -ENODEV;
+}
+#endif
 #endif /* _F_ROCKUSB_H_ */

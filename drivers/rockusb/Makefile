@@ -4,3 +4,4 @@
 
 obj-$(CONFIG_$(SPL_)ROCKUSB) += rockusb.o
 obj-$(CONFIG_$(SPL_)ROCKUSB_MMC) += rockusb_mmc.o
+obj-$(CONFIG_SPL_ROCKUSB_NAND) += rockusb_nand_spl.o
