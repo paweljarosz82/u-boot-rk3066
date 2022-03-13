@@ -747,7 +747,6 @@ config SPL_NAND_BASE
 	  Include nand_base.c in the SPL.
 
 config SPL_NAND_IDENT
-	depends on SPL_NAND_BASE
 	bool "Use chip ID to identify NAND flash"
 	help
 	  SPL uses the chip ID list to identify the NAND flash.
