@@ -657,6 +657,17 @@ config NAND_DENALI_SPARE_AREA_SKIP_BYTES
 	  of OOB area before last ECC sector data starts.  This is potentially
 	  used to preserve the bad block marker in the OOB area.
 
+config SPL_ROCKCHIP_NAND
+	bool "Support for NAND controller on Rockchip SoCs in SPL"
+	depends on ARCH_ROCKCHIP
+	select SPL_NAND_IDENT
+	select DM_MTD
+	select SYS_NAND_SELF_INIT
+	select SPL_SYS_NAND_SELF_INIT
+	help
+	  Enables support for NAND Flash chips on Rockchip SoCs platform in SPL.
+	  This controller is found on Rockchip SoCs.
+
 config SPL_NAND_SIMPLE
 	bool "Use simple SPL NAND driver"
 	depends on !SPL_NAND_AM33XX_BCH
