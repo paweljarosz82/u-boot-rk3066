@@ -20,6 +20,9 @@ struct rockusb_dev_desc *rockusb_get_dev(char *dev_type,
 	if (strcmp(dev_type, "mmc") == 0)
 		ret = rockusb_fill_mmc_dev(desc, dev_type, dev_index);
 
+	else if (strcmp(dev_type, "nand") == 0)
+		ret = rockusb_fill_nand_dev(desc, dev_type, dev_index);
+
 	if (ret)
 		goto error;
 	else

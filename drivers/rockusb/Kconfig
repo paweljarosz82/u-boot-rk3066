@@ -48,6 +48,17 @@ config SPL_ROCKUSB_MMC
           the rockusb gadget. For more detail about Rockusb protocol, please see
           doc/README.rockusb
 
+config SPL_ROCKUSB_NAND
+        bool "SPL NAND backend for ROCKUSB"
+        depends on SPL_ROCKCHIP_NAND
+        help
+          This option enables using ROCKUSB to read and write to NAND based
+          storage in SPL.
+          Rockusb protocol is widely used by Rockchip SoC based devices. It can
+          read/write info, image to/from devices. This enables the USB part of
+          the rockusb gadget. For more detail about Rockusb protocol, please see
+          doc/README.rockusb
+
 endif
 
 endmenu
