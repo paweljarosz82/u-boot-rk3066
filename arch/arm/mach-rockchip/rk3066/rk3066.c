@@ -7,6 +7,7 @@
 #include <asm/io.h>
 #include <asm/arch-rockchip/bootrom.h>
 #include <asm/arch-rockchip/grf_rk3066.h>
+#include <asm/arch-rockchip/hardware.h>
 
 #define GRF_BASE	0x20008000
 
@@ -24,6 +25,13 @@ void board_debug_uart_init(void)
 		     GPIO1B1_MASK | GPIO1B0_MASK,
 		     GPIO1B1_UART2_SOUT << GPIO1B1_SHIFT |
 		     GPIO1B0_UART2_SIN << GPIO1B0_SHIFT);
+}
+
+void rockchip_nand_board_early_init(void)
+{
+	struct rk3066_grf * const grf = (void *)GRF_BASE;
+
+	rk_clrreg(&grf->soc_con0, EMMC_FLASH_SEL_MASK);
 }
 
 void spl_board_init(void)
